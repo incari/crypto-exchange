@@ -1,36 +1,23 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Prueba técnica Bitnovo
 
-## Getting Started
+### Demo
 
-First, run the development server:
+## Descripción
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+El desarrollo consiste en crear una pasarela de pago con criptodivisas. Esta se va a realizar en un entorno de testnet. Toda la documentación de los endpoints y los contratos de las criptodivisas de testnet la podemos encontrar aquí.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+En el Header de los endpoints tendrá que pasarle el Identificador (X-Device-Id) que te hayamos proporcionado por email para poder crear pagos.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Debe regirse estrictamente por el desarrollo de Figma. Utilizar react.js con hooks, y nextjs pages router.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+El desarrollo principal consiste en:
 
-## Learn More
+1. **Crear pago y selección de moneda**  
+   El Merchant deberá poder crear un pago añadiendo el importe, concepto y criptodivisa. Para crear el pago se hará uso del endpoint `POST orders` y para listar las criptodivisas disponibles se hará con el endpoint `GET currencies`. Los 3 campos mencionados anteriormente deberán introducirse en una misma pantalla y las criptodivisas que se podrán seleccionar para crear el pago variarán en función del importe del pago. Hay que controlar el importe máximo y mínimo de cada moneda.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+2. **Pasarela de pago QR**  
+   Una vez el pago esté creado debemos mostrar todos los datos del resumen del pago y la información para que el Cliente pueda realizarlo. Todos estos datos los podemos obtener haciendo uso del endpoint `GET orders/info`.  
+   Importante: la pasarela de pago debe refrescarse en tiempo real, es decir, si se recibe un pago la pantalla se debe refrescar de forma automática. Al crear un pago, se crea un websocket el cual se puede escuchar para recibir notificaciones de cambio de estado.
+   Ejemplo de websocket:  
+   `const socket = new WebSocket('wss://payments.pre-bnvo.com/ws/<identifier>');`  
+   Sim
